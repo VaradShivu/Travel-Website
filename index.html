@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TravelSphere</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+      scroll-behavior:smooth;
+    }
+
+    body{
+      background:#050816;
+      color:white;
+      overflow-x:hidden;
+    }
+
+    section{
+      padding:100px 8%;
+    }
+
+    h2{
+      text-align:center;
+      font-size:3rem;
+      margin-bottom:60px;
+    }
+
+    /* NAVBAR */
+
+    nav{
+      position:fixed;
+      width:100%;
+      top:0;
+      left:0;
+      z-index:1000;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:20px 8%;
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(255,255,255,0.1);
+    }
+
+    .logo{
+      font-size:2rem;
+      font-weight:700;
+      background:linear-gradient(to right,#00f5ff,#8a2be2);
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+
+    nav ul{
+      display:flex;
+      list-style:none;
+      gap:30px;
+    }
+
+    nav ul li a{
+      text-decoration:none;
+      color:white;
+      transition:0.3s;
+    }
+
+    nav ul li a:hover{
+      color:#00f5ff;
+    }
+
+    /* HERO */
+
+    .hero{
+      height:100vh;
+      position:relative;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      overflow:hidden;
+    }
+
+    .hero video{
+      position:absolute;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      z-index:-2;
+    }
+
+    .overlay{
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,0.65);
+      z-index:-1;
+    }
+
+    .hero-content{
+      max-width:900px;
+      padding:20px;
+      animation:fadeIn 2s ease;
+    }
+
+    .hero h1{
+      font-size:5rem;
+      line-height:1.2;
+      margin-bottom:20px;
+    }
+
+    .gradient{
+      background:linear-gradient(to right,#00f5ff,#8a2be2);
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+
+    .hero p{
+      font-size:1.2rem;
+      color:#ddd;
+      margin-bottom:40px;
+    }
+
+    .search-box{
+      display:flex;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.15);
+      backdrop-filter:blur(20px);
+      border-radius:60px;
+      overflow:hidden;
+    }
+
+    .search-box input{
+      flex:1;
+      padding:20px;
+      background:transparent;
+      border:none;
+      outline:none;
+      color:white;
+      font-size:1rem;
+    }
+
+    .search-box button{
+      padding:20px 40px;
+      border:none;
+      background:linear-gradient(to right,#00f5ff,#8a2be2);
+      color:white;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    /* GLASS */
+
+    .glass{
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.1);
+      backdrop-filter:blur(18px);
+      border-radius:25px;
+    }
+
+    /* DESTINATIONS */
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:30px;
+    }
+
+    .card{
+      overflow:hidden;
+      position:relative;
+      transition:0.5s;
+    }
+
+    .card:hover{
+      transform:translateY(-10px) scale(1.03);
+    }
+
+    .card img{
+      width:100%;
+      height:400px;
+      object-fit:cover;
+    }
+
+    .card-content{
+      position:absolute;
+      bottom:20px;
+      left:20px;
+    }
+
+    .card-content h3{
+      font-size:2rem;
+    }
+
+    /* PLANNER */
+
+    .planner{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:40px;
+    }
+
+    .planner-box{
+      padding:40px;
+    }
+
+    .planner-box input,
+    .planner-box select{
+      width:100%;
+      padding:15px;
+      margin-top:15px;
+      border:none;
+      border-radius:12px;
+      background:rgba(0,0,0,0.2);
+      color:white;
+      outline:none;
+    }
+
+    .planner-box button{
+      width:100%;
+      padding:15px;
+      margin-top:25px;
+      border:none;
+      border-radius:12px;
+      background:linear-gradient(to right,#00f5ff,#8a2be2);
+      color:white;
+      cursor:pointer;
+      font-size:1rem;
+      font-weight:600;
+    }
+
+    /* PACKAGES */
+
+    .package{
+      padding:30px;
+      transition:0.5s;
+    }
+
+    .package:hover{
+      transform:translateY(-10px);
+    }
+
+    .package h3{
+      margin:20px 0;
+      font-size:1.8rem;
+    }
+
+    .package button{
+      width:100%;
+      padding:15px;
+      border:none;
+      border-radius:12px;
+      background:linear-gradient(to right,#00f5ff,#8a2be2);
+      color:white;
+      cursor:pointer;
+      margin-top:20px;
+    }
+
+    /* GALLERY */
+
+    .gallery{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:20px;
+    }
+
+    .gallery img{
+      width:100%;
+      height:300px;
+      object-fit:cover;
+      border-radius:20px;
+      transition:0.5s;
+    }
+
+    .gallery img:hover{
+      transform:scale(1.05);
+    }
+
+    /* FAQ */
+
+    .faq{
+      padding:30px;
+      margin-bottom:20px;
+    }
+
+    /* FOOTER */
+
+    footer{
+      background:#02030a;
+      padding:70px 8%;
+      border-top:1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:40px;
+    }
+
+    .newsletter{
+      display:flex;
+      margin-top:20px;
+      overflow:hidden;
+      border-radius:40px;
+    }
+
+    .newsletter input{
+      flex:1;
+      padding:15px;
+      border:none;
+      outline:none;
+    }
+
+    .newsletter button{
+      padding:15px 25px;
+      border:none;
+      background:linear-gradient(to right,#00f5ff,#8a2be2);
+      color:white;
+      cursor:pointer;
+    }
+
+    /* CHATBOT */
+
+    .chatbot{
+      position:fixed;
+      bottom:30px;
+      right:30px;
+      width:70px;
+      height:70px;
+      border-radius:50%;
+      background:linear-gradient(to right,#00f5ff,#8a2be2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:2rem;
+      cursor:pointer;
+      animation:float 3s infinite ease-in-out;
+    }
+
+    /* ANIMATION */
+
+    @keyframes fadeIn{
+      from{
+        opacity:0;
+        transform:translateY(40px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @keyframes float{
+      0%{transform:translateY(0);}
+      50%{transform:translateY(-10px);}
+      100%{transform:translateY(0);}
+    }
+
+    /* MOBILE */
+
+    @media(max-width:900px){
+
+      .hero h1{
+        font-size:3rem;
+      }
+
+      nav ul{
+        display:none;
+      }
+
+      .search-box{
+        flex-direction:column;
+        border-radius:20px;
+      }
+
+      .search-box button{
+        width:100%;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <nav>
+
+    <div class="logo">TravelSphere</div>
+
+    <ul>
+      <li><a href="#destinations">Destinations</a></li>
+      <li><a href="#planner">AI Planner</a></li>
+      <li><a href="#packages">Packages</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+  </nav>
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <!-- WORKING VIDEO -->
+    <video autoplay muted loop playsinline>
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-clouds-and-blue-sky-2408-large.mp4" type="video/mp4">
+    </video>
+
+    <div class="overlay"></div>
+
+    <div class="hero-content">
+
+      <h1>
+        Explore The Future Of
+        <span class="gradient">AI Travel</span>
+      </h1>
+
+      <p>
+        Smart AI-powered travel planning with futuristic immersive experiences.
+      </p>
+
+      <div class="search-box">
+        <input type="text" placeholder="Search destinations, hotels, flights...">
+        <button>Search</button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- DESTINATIONS -->
+
+  <section id="destinations">
+
+    <h2>Popular Destinations</h2>
+
+    <div class="grid">
+
+      <div class="card glass">
+        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1200" alt="Bali">
+        <div class="card-content">
+          <h3>Bali</h3>
+          <p>Luxury Paradise</p>
+        </div>
+      </div>
+
+      <div class="card glass">
+        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1200" alt="Dubai">
+        <div class="card-content">
+          <h3>Dubai</h3>
+          <p>Futuristic City</p>
+        </div>
+      </div>
+
+      <div class="card glass">
+        <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=1200" alt="Paris">
+        <div class="card-content">
+          <h3>Paris</h3>
+          <p>Romantic Escape</p>
+        </div>
+      </div>
+
+      <div class="card glass">
+        <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1200" alt="Tokyo">
+        <div class="card-content">
+          <h3>Tokyo</h3>
+          <p>Neon Adventure</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- AI PLANNER -->
+
+  <section id="planner">
+
+    <h2>AI Trip Planner</h2>
+
+    <div class="planner">
+
+      <div class="planner-box glass">
+
+        <h3>Create Smart Itinerary</h3>
+
+        <input type="text" placeholder="Destination">
+
+        <input type="date">
+
+        <select>
+          <option>Luxury Travel</option>
+          <option>Budget Travel</option>
+          <option>Adventure Travel</option>
+        </select>
+
+        <button onclick="generateTrip()">
+          Generate AI Plan
+        </button>
+
+      </div>
+
+      <div class="planner-box glass">
+
+        <h3>Travel Statistics</h3>
+
+        <canvas id="travelChart"></canvas>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PACKAGES -->
+
+  <section id="packages">
+
+    <h2>Trending Packages</h2>
+
+    <div class="grid">
+
+      <div class="package glass">
+        <h3>Dubai Luxury Tour</h3>
+        <p>5-Star Hotel + Business Flight</p>
+        <button>Book Now</button>
+      </div>
+
+      <div class="package glass">
+        <h3>Bali Beach Escape</h3>
+        <p>Premium Resort Experience</p>
+        <button>Book Now</button>
+      </div>
+
+      <div class="package glass">
+        <h3>Tokyo AI Adventure</h3>
+        <p>Technology + Culture Journey</p>
+        <button>Book Now</button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- GALLERY -->
+
+  <section id="gallery">
+
+    <h2>Photo Gallery</h2>
+
+    <div class="gallery">
+
+      <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1200" alt="">
+      <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1200" alt="">
+      <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=1200" alt="">
+      <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1200" alt="">
+
+    </div>
+
+  </section>
+
+  <!-- FAQ -->
+
+  <section>
+
+    <h2>FAQ</h2>
+
+    <div class="faq glass">
+      <h3>How does AI planner work?</h3>
+      <p>It creates personalized itineraries using smart recommendations.</p>
+    </div>
+
+    <div class="faq glass">
+      <h3>Can I customize travel packages?</h3>
+      <p>Yes, all travel plans are customizable.</p>
+    </div>
+
+    <div class="faq glass">
+      <h3>Is this website mobile responsive?</h3>
+      <p>Yes, fully optimized for all devices.</p>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer id="contact">
+
+    <div class="footer-grid">
+
+      <div>
+        <div class="logo">TravelSphere</div>
+        <p style="margin-top:20px;">
+          Next-generation AI-powered travel platform.
+        </p>
+      </div>
+
+      <div>
+
+        <h3>Newsletter</h3>
+
+        <div class="newsletter">
+          <input type="email" placeholder="Enter your email">
+          <button>Join</button>
+        </div>
+
+      </div>
+
+      <div>
+        <h3>Contact</h3>
+        <p style="margin-top:20px;">support@travelsphere.ai</p>
+        <p>+1 800 456 7890</p>
+      </div>
+
+    </div>
+
+  </footer>
+
+  <!-- CHATBOT -->
+
+  <div class="chatbot">
+    🤖
+  </div>
+
+  <script>
+
+    // AI BUTTON
+
+    function generateTrip(){
+      alert("AI Travel Plan Generated Successfully!");
+    }
+
+    // CHART
+
+    const ctx = document.getElementById('travelChart');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+          label: 'Travel Users',
+          data: [1200,2400,3500,4800,6200,7600],
+          borderColor: '#00f5ff',
+          backgroundColor: 'rgba(0,245,255,0.2)',
+          fill:true,
+          tension:0.4
+        }]
+      },
+      options: {
+        responsive:true,
+        plugins:{
+          legend:{
+            labels:{
+              color:'white'
+            }
+          }
+        },
+        scales:{
+          x:{
+            ticks:{
+              color:'white'
+            }
+          },
+          y:{
+            ticks:{
+              color:'white'
+            }
+          }
+        }
+      }
+    });
+
+    // PARALLAX
+
+    window.addEventListener("scroll",()=>{
+
+      const scroll = window.pageYOffset;
+
+      document.querySelector(".hero video").style.transform =
+      `translateY(${scroll * 0.3}px)`;
+
+    });
+
+  </script>
+
+</body>
+</html>
